@@ -1,0 +1,142 @@
+import java.util.*; import java.io.*;
+public class proj3 {
+public static void main(String[] args) {
+Scanner s = new Scanner(System.in); boolean mainLoop = true;
+int choice;
+int[] a = new int[0]; try {
+System.out.println("Please enter the name of a text or ASCII file that contains a list of integer numbers separated by commas: ");
+String fileName = s.nextLine(); //stores input of file name need to make handler for EOF error
+BufferedReader reader = new BufferedReader(new FileReader(fileName)); String line = reader.readLine();
+String[] Sequence = line.split(",");
+a = new int[Sequence.length];
+for (int i = 0; i < Sequence.length; i++) { a[i] = Integer.parseInt(Sequence[i]);
+}
+} catch (IOException e) {
+System.out.print("File does not exist");
+System.exit(1); }
+do {
+System.out.println("----------Maximum Subsequence Sum Main
+Menu----------\n");
+System.out.print("1.) Run MSS Algorithm 1 \n");
+System.out.print("2.) Run MSS Algorithm 2 \n");
+System.out.print("3.) Run MSS Algorithm 3 \n");
+System.out.print("4.) Run MSS Algorithm 4 \n");
+System.out.print("5.) Run all four MSS algorithms together in sequence.
+\n");
+System.out.print("6.) Exit Program \n"); System.out.print("\nEnter Your Menu Choice: "); choice = s.nextInt();
+long time = System.nanoTime(); long runtime;
+int maxSum;
+switch (choice) {
+case 1:
+maxSum = MSSAlgorithm1(a);
+runtime = System.nanoTime() - time;
+System.out.print("The MSS is " + maxSum);
+System.out.print("The total elapsed execution time is " + runtime); break;
+case 2:
+ maxSum = MSSAlgorithm2(a);
+runtime = System.nanoTime() - time;
+System.out.print("The MSS is " + maxSum);
+System.out.print("The total elapsed execution time is " + runtime); //Runs MSS Algorithm 2
+//evaluates the elapsed execution time
+break;
+case 3:
+maxSum = MSSAlgorithm3(a);
+runtime = System.nanoTime() - time;
+System.out.print("The MSS is " + maxSum);
+System.out.print("The total elapsed execution time is " + runtime);
+//Runs MSS Algorithm 3
+//evaluates the elapsed execution time break;
+case 4:
+maxSum = MSSAlgorithm4(a);
+runtime = System.nanoTime() - time;
+System.out.print("The MSS is " + maxSum);
+System.out.print("The total elapsed execution time is " + runtime);
+//Runs MSS Algorithm 4
+//evaluates the elapsed execution time break;
+case 5:
+int maxSum1 = MSSAlgorithm1(a); int maxSum2 = MSSAlgorithm2(a); int maxSum3 = MSSAlgorithm3(a); int maxSum4 = MSSAlgorithm4(a);
+runtime = System.nanoTime() - time;
+if ((maxSum1 == maxSum2) && (maxSum2 == maxSum3) && (maxSum3 ==
+maxSum4)) {
+System.out.print("The MSS is " + maxSum1);
+System.out.print("The total elapsed execution time is " + runtime); } else {
+System.out.print("There is an error"); }
+//Runs all four MSS algorithms together in sequence. //evaluates the elapsed execution time
+break;
+case 6: //exit program case System.out.println("Exiting Program..."); break;
+default:
+System.out.println(choice + " is not a valid Menu Option! Please
+Select Another."); }
+} while (choice != 6 /*Exit loop when choice is 6*/ ); }
+//Definition and implementation of the first MSS algorithm
+ 
+ public static int MSSAlgorithm1(int[] arr) {
+ int maxSum = int sum;
+for (int i =
+0;
+0; i < arr.length; i++) {
+= i; j < arr.length; j++) {
+k = i; k < j + 1; k++) {
+for (int j sum = 0; for (int sum +=
+arr[k];
+if (sum > maxSum) {
+maxSum = sum; }
+} }
+}
+return maxSum; }
+public static int
+for (int i sum = 0; for (int
+MSSAlgorithm2(int[] arr) {
+i < arr.length; i++) {
+int maxSum = int sum = 0;
+0; = 0;
+j = i; j < arr.length; j++) { sum += arr[j];
+if (sum > maxSum) {
+sum = maxSum; }
+} }
+return maxSum; }
+// Wrapper over findMaximumSum() function
+public static int MSSAlgorithm3(int[] nums) {
+// base case
+if (nums == null || nums.length == 0) { return 0;
+}
+return helperMSS3(nums, 0, nums.length - 1); }
+public static int helperMSS3(int[] arr, int left, int right) { if (right == left) {
+return arr[left]; }
+// Finds the middle array element
+int mid = (left + right) / 2;
+// Finds maximum subarray sum for the left subarray, incl middle // element int leftMax = Integer.MIN_VALUE;
+int sum = 0;
+for (int i = mid; i >= left; i--) {
+sum += arr[i];
+if (sum > leftMax) {
+leftMax = sum; }
+}
+
+// finds maximum subarray sum for the right subarray, excluding middle element
+int rightMax = Integer.MIN_VALUE;
+sum = 0; // reset sum to 0
+for (int i = mid + 1; i <= right; i++) {
+sum += arr[i];
+if (sum > rightMax) {
+rightMax = sum; }
+}
+// Recursively finds the maximum subarray sum for the left and right subarray, and takes maximum
+int maxLeftRight = Integer.max(helperMSS3(arr, left, mid), helperMSS3(arr, mid + 1, right));
+// return the maximum of the three
+return Integer.max(maxLeftRight, leftMax + rightMax); }
+public static int MSSAlgorithm4(int[] arr) {
+int maxSum = 0;
+int sum = 0;
+for (int j = 0; j < arr.length; j++) {
+sum += arr[j];
+if (sum > maxSum) {
+maxSum = sum; } else {
+if (sum < 0) {
+sum = 0; }
+}
+// sum = 0
+}
+//return the maxSum
+return maxSum; }
+}
